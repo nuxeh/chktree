@@ -1,10 +1,7 @@
 #!/usr/bin/awk -f
 
-/^TREES=/ {
-	count++
-	print "Found TREES"
-}
-END {
-	if (count == 0)
-		print "Please provide TREES environment variable"
-}
+/^ARGV[1]=/ { count++ }
+END { if (count == 0) {
+	print "Please provide " ARGV[1] " environment variable"
+	exit 1
+}}
