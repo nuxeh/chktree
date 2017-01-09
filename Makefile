@@ -3,6 +3,8 @@ all: all-global-definitions report
 # todo deps - don't rebuild if file log is up-to-date, and kernel doesn't need
 # to be rebuilt
 
+# TODO: ENV var handling
+
 PWD=$(shell pwd -P)
 CC=arm-linux-gnueabihf-
 DEFCONFIG=ts001_ic_defconfig
