@@ -11,7 +11,7 @@ build-kernel:
 	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- ts001_ic_defconfig && \
 	./scripts/config -e CONFIG_DEBUG_INFO && \
 	yes '' | make ARCH=arm oldconfig && \
-	make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage dtbs \
+	make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage dtbs 2>&1 \
 	| awk '/CC/{print $NF}' > $(PWD)/compiled-objects
 
 objdump:
