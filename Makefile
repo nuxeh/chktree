@@ -1,4 +1,4 @@
-all: build-static-databases build run-tests report
+all: cscope.out report
 
 # todo deps - don't rebuild if file log is up-to-date, and kernel doesn't need
 # to be rebuilt
@@ -32,7 +32,7 @@ compiled-headers: compiled-objects
 
 # make cscope.files, telling scsope which files to look at
 cscope.files: compiled-source compiled-headers compiled-objects
-	cat compiled-source compiled-headers | sort > cmake.files
+	cat compiled-source compiled-headers | sort > cscope.files
 
 # make cscope database
 cscope.out: cscope.files
