@@ -51,5 +51,5 @@ report: all-global-definitions
 	./run-tests.awk 
 
 clean:
-	rm compiled-source compiled-headers compiled-objects \
+	rm -rf compiled-source compiled-headers compiled-objects \
 		$(KERNPATH)/cscope.out all-global-definitions
