@@ -41,8 +41,8 @@ cscope.out: cscope.files
 		cscope 
 
 # run tests
-report: compiled-headers compiled-objects cmake.files
-	true
+report: compiled-headers compiled-objects cscope.files
+	./run-tests.awk 
 
 clean:
 	rm compiled-source compiled-headers compiled-objects \
