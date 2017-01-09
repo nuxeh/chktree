@@ -14,15 +14,22 @@ compiled-objects:
 	yes '' | make ARCH=arm oldconfig && \
 	make -j8 ARCH=arm CROSS_COMPILE=$(CC) zImage dtbs 2>&1 \
 	| awk '/CC/{print $$NF}' > /tmp/compiled-objects
-	# create file list in local dir
+	# create file lists in local dir
+	sort /tmp/compiled-objects | grep '\.o$$' > compiled-objects
 	sort /tmp/compiled-objects \
-	| awk -F '.' -v OFS='.' '/\.o$$/{$$NF = "c"; print}' > compiled-objects
+	| awk -F '.' -v OFS='.' '/\.o$$/{$$NF = "c"; print}' > compiled-source
 
-compiled-headers:
+compiled-headers: compiled-objects
 	for file in `cat compiled-objects`; do \
-		$(CC)objdump -W $(KERNPATH)$$file \
-		| ./filter-objdump.awk >> compiled-headers \
-	done
+		$(CC)objdump -W $(KERNPATH)/$$file \
+		| ./filter-objdump.awk >> /tmp/compiled-headers; done
+	sort /tmp/compiled-headers | uniq > compiled-headers
 
-report:
+cmake.files: compiled-headers compiled-objects
+	cat compiled-source compiled-headers > cmake.files
+
+$(KERNPATH)/cmake.out:
+	true
+
+report: compiled-headers compiled-objects cmake.files
 	true
