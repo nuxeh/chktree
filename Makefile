@@ -6,7 +6,7 @@ PWD=$(shell pwd -P)
 CC=arm-linux-gnueabihf-
 
 # enable debugging symbols, build kernel, save list of filenames from CC lines
-compiled-objects:
+compiled-objects compiled-source:
 	cd $(KERNPATH) && \
 	make clean && \
 	make ARCH=arm CROSS_COMPILE=$(CC) ts001_ic_defconfig && \
@@ -25,7 +25,7 @@ compiled-headers: compiled-objects
 		| ./filter-objdump.awk >> /tmp/compiled-headers; done
 	sort /tmp/compiled-headers | uniq > compiled-headers
 
-cmake.files: compiled-headers compiled-objects
+cmake.files: compiled-source compiled-headers compiled-objects
 	cat compiled-source compiled-headers > cmake.files
 
 $(KERNPATH)/cmake.out:
