@@ -35,15 +35,21 @@ cscope.files: compiled-source compiled-headers compiled-objects
 	cat compiled-source compiled-headers | sort > cscope.files
 
 # make cscope database
-cscope.out: cscope.files
+$(KERNPATH)/cscope.out: cscope.files
 	cp cscope.files $(KERNPATH)
 	cd $(KERNPATH) && \
 		cscope -b
 
+# make a list of all global definitions in the files used for the build, using
+# cscope
+all-global-definitions: $(KERNPATH)/cscope.out
+	cd $(KERNPATH) && \
+		cscope -L -1 ".*" > $(PWD)/all-global-definitions
+
 # run tests
-report: compiled-headers compiled-objects cscope.files
+report: all-global-definitions
 	./run-tests.awk 
 
 clean:
 	rm compiled-source compiled-headers compiled-objects \
-		$(KERNELPATH)/cscope.out
+		$(KERNELPATH)/cscope.out all-global-definitions

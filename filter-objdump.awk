@@ -12,10 +12,6 @@ BEGIN {OFS = "/"}
 		dirs[$1] = $NF
 	} else if (state == 2 && $2 != 0 && $NF != "Name") {
 		print dirs[$2], $NF
-
-
-
-
 	}
 }
 
