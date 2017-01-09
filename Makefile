@@ -38,7 +38,7 @@ cscope.files: compiled-source compiled-headers compiled-objects
 cscope.out: cscope.files
 	cp cscope.files $(KERNPATH)
 	cd $(KERNPATH) && \
-		cscope 
+		cscope -b
 
 # run tests
 report: compiled-headers compiled-objects cscope.files
