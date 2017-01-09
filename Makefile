@@ -1,4 +1,4 @@
-all: cscope.out report
+all: all-global-definitions report
 
 # todo deps - don't rebuild if file log is up-to-date, and kernel doesn't need
 # to be rebuilt
@@ -52,4 +52,4 @@ report: all-global-definitions
 
 clean:
 	rm compiled-source compiled-headers compiled-objects \
-		$(KERNELPATH)/cscope.out all-global-definitions
+		$(KERNPATH)/cscope.out all-global-definitions
