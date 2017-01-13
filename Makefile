@@ -33,8 +33,8 @@ compiled-headers: compiled-objects
 	sort /tmp/compiled-headers | uniq > compiled-headers
 
 # make cscope.files, telling scsope which files to look at
-cscope.files: compiled-source compiled-headers compiled-objects
-	cat compiled-source compiled-headers | sort > cscope.files
+cscope.files: compiled-headers
+	cat compiled-headers | sort > cscope.files
 
 # make cscope database
 $(KERNPATH)/cscope.out: cscope.files
@@ -48,9 +48,15 @@ all-global-definitions: $(KERNPATH)/cscope.out
 	cd $(KERNPATH) && \
 		cscope -L -1 ".*" > $(PWD)/all-global-definitions
 
+all-defines: all-global-definitions
+	cat all-global-definitions | ./strip-defines.awk > all-defines
+
+all-prototypes: all-global-definitions
+
+
 # run tests
-report: all-global-definitions
-	./run-tests.awk 
+report: all-defines all-prototypes
+	./run-tests.awk
 
 clean:
 	rm -rf compiled-source compiled-headers compiled-objects \
