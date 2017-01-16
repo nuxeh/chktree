@@ -60,4 +60,5 @@ report: all-defines all-prototypes
 
 clean:
 	rm -rf compiled-source compiled-headers compiled-objects \
-		$(KERNPATH)/cscope.out all-global-definitions
+		$(KERNPATH)/cscope.out all-global-definitions all-defines \
+		cscope.files
