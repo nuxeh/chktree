@@ -65,4 +65,5 @@ report: all-defines all-prototypes
 	./run-tests.awk
 
 clean:
+	rm -f $(KERNPATH)/cscope.out
 	rm -rf output
