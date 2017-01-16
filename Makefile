@@ -42,8 +42,8 @@ output/cscope.files: output/compiled-headers
 	cd output && cat compiled-headers | sort > cscope.files
 
 # make cscope database
-$(KERNPATH)/cscope.out: cscope.files
-	cp cscope.files $(KERNPATH)
+$(KERNPATH)/cscope.out: output/cscope.files
+	cp output/cscope.files $(KERNPATH)
 	cd $(KERNPATH) && \
 		cscope -b
 
@@ -53,7 +53,7 @@ output/all-global-definitions: $(KERNPATH)/cscope.out
 	cd $(KERNPATH) && \
 		cscope -L -1 ".*" > $(PWD)/output/all-global-definitions
 
-all-defines: all-global-definitions
+all-defines: output/all-global-definitions
 	cd output && \
 	cat all-global-definitions | ../strip-defines.awk > all-defines
 
@@ -66,4 +66,4 @@ report: all-defines all-prototypes
 
 clean:
 	rm -f $(KERNPATH)/cscope.out
-	rm -rf output
+	rm -rfv output
