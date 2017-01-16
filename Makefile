@@ -31,8 +31,7 @@ output/compiled-objects output/compiled-source: output
 # use objdump to extract debugging symbols describing the header files
 # included to make build compiled object
 output/compiled-headers: output/compiled-objects
-	cd output && \
-	for file in `cat compiled-objects`; do \
+	for file in `cat output/compiled-objects`; do \
 		$(CC)objdump -W $(KERNPATH)/$$file \
 		| ../filter-objdump.awk >> /tmp/compiled-headers; done
 	sort /tmp/compiled-headers | uniq > output/compiled-headers
