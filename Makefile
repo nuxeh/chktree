@@ -9,9 +9,12 @@ PWD=$(shell pwd -P)
 CC=arm-linux-gnueabihf-
 DEFCONFIG=ts001_ic_defconfig
 
+output:
+	mkdir output
+
 # enable debugging symbols, build kernel, save list of object filenames from
 # CC lines in kbuild output
-compiled-objects compiled-source:
+output/compiled-objects output/compiled-source: output
 	cd $(KERNPATH) && \
 		make clean && \
 		make ARCH=arm CROSS_COMPILE=$(CC) $(DEFCONFIG) && \
@@ -20,21 +23,23 @@ compiled-objects compiled-source:
 		make -j8 ARCH=arm CROSS_COMPILE=$(CC) zImage dtbs 2>&1 \
 		| awk '/CC/{print $$NF}' > /tmp/compiled-objects
 	# create file lists in local dir
-	sort /tmp/compiled-objects | grep '\.o$$' > compiled-objects
+	sort /tmp/compiled-objects | grep '\.o$$' > output/compiled-objects
 	sort /tmp/compiled-objects \
-	| awk -F '.' -v OFS='.' '/\.o$$/{$$NF = "c"; print}' > compiled-source
+	| awk -F '.' -v OFS='.' '/\.o$$/{$$NF = "c"; print}' \
+	> output/compiled-source
 
 # use objdump to extract debugging symbols describing the header files
 # included to make build compiled object
-compiled-headers: compiled-objects
+output/compiled-headers: output/compiled-objects
+	cd output && \
 	for file in `cat compiled-objects`; do \
 		$(CC)objdump -W $(KERNPATH)/$$file \
-		| ./filter-objdump.awk >> /tmp/compiled-headers; done
-	sort /tmp/compiled-headers | uniq > compiled-headers
+		| ../filter-objdump.awk >> /tmp/compiled-headers; done
+	sort /tmp/compiled-headers | uniq > output/compiled-headers
 
 # make cscope.files, telling scsope which files to look at
-cscope.files: compiled-headers
-	cat compiled-headers | sort > cscope.files
+output/cscope.files: output/compiled-headers
+	cd output && cat compiled-headers | sort > cscope.files
 
 # make cscope database
 $(KERNPATH)/cscope.out: cscope.files
@@ -44,12 +49,13 @@ $(KERNPATH)/cscope.out: cscope.files
 
 # make a list of all global definitions in the files used for the build, using
 # cscope
-all-global-definitions: $(KERNPATH)/cscope.out
+output/all-global-definitions: $(KERNPATH)/cscope.out
 	cd $(KERNPATH) && \
-		cscope -L -1 ".*" > $(PWD)/all-global-definitions
+		cscope -L -1 ".*" > $(PWD)/output/all-global-definitions
 
 all-defines: all-global-definitions
-	cat all-global-definitions | ./strip-defines.awk > all-defines
+	cd output && \
+	cat all-global-definitions | ../strip-defines.awk > all-defines
 
 all-prototypes: all-global-definitions
 
@@ -59,6 +65,4 @@ report: all-defines all-prototypes
 	./run-tests.awk
 
 clean:
-	rm -rf compiled-source compiled-headers compiled-objects \
-		$(KERNPATH)/cscope.out all-global-definitions all-defines \
-		cscope.files
+	rm -rf output
