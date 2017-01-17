@@ -63,10 +63,11 @@ output/all-defines: output/all-global-definitions
 output/all-prototypes: output/all-global-prototypes
 
 
-output/split-defines: output/all-defines
+output/split-defines/token: output/all-defines
 	mkdir output/split-defines
 	cd output/split-defines && \
 		$(PWD)/sort-dirs.awk $(PATHS) $(PWD)/all-defines
+	touch output/split-defines/token
 
 output/split-prototypes: output/all-defines
 	mkdir output/split-prototypes
