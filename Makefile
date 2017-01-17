@@ -64,16 +64,15 @@ output/all-defines: output/all-global-definitions
 output/all-prototypes: output/all-global-prototypes
 
 
-output/split-defines/token: output/all-defines
+output/split-defines/duplicate-symbols: output/all-defines
 	mkdir -p output/split-defines
 	cd output/split-defines && \
 		$(PWD)/sort-dirs.awk $(PATHS) $(PWD)/output/all-defines
-	touch output/split-defines/token
 	# find duplicate symbols
 	cd output/split-defines && \
-		awk '{print $3}' sorted_path_* \
+		awk '{print $$3}' sorted_path_* \
 		| sort | uniq -c \
-		| awk '{if ($1 > 1) print $2}' > duplicate_symbols
+		| awk '{if ($$1 > 1) print $$2}' > duplicate-symbols
 
 output/split-prototypes: output/all-defines
 	mkdir output/split-prototypes
