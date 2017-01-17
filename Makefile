@@ -34,7 +34,7 @@ output/compiled-objects output/compiled-source: output
 output/compiled-headers: output/compiled-objects
 	for file in `cat output/compiled-objects`; do \
 		$(CC)objdump -W $(KERNPATH)/$$file \
-		| ./filter-objdump.awk >> /tmp/compiled-headers; done
+		| $(PWD)/filter-objdump.awk >> /tmp/compiled-headers; done
 	sort /tmp/compiled-headers | uniq > output/compiled-headers
 
 # make cscope.files, telling scsope which files to look at
@@ -55,7 +55,7 @@ output/all-global-definitions: $(KERNPATH)/cscope.out
 
 output/all-defines: output/all-global-definitions
 	cd output && \
-	cat all-global-definitions | ../strip-defines.awk > all-defines
+	cat all-global-definitions | $(PWD)/strip-defines.awk > all-defines
 
 output/all-prototypes: output/all-global-prototypes
 
