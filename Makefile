@@ -69,6 +69,11 @@ output/split-defines/token: output/all-defines
 	cd output/split-defines && \
 		$(PWD)/sort-dirs.awk $(PATHS) $(PWD)/output/all-defines
 	touch output/split-defines/token
+	# find duplicate symbols
+	cd output/split-defines && \
+		awk '{print $3}' sorted_path_* \
+		| sort | uniq -c \
+		| awk '{if ($1 > 1) print $2}' > duplicate_symbols
 
 output/split-prototypes: output/all-defines
 	mkdir output/split-prototypes
