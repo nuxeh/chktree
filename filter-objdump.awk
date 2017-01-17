@@ -6,7 +6,7 @@ BEGIN {OFS = "/"}
 /The File Name Table/ {state++; next}
 /^$/ {if (state == 2) exit}
 
-/\.h$/ {
+{
 	if (state == 1) {
 		gsub(/^\.\//, "", $NF)
 		dirs[$1] = $NF

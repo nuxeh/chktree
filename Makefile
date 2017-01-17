@@ -41,7 +41,8 @@ output/compiled-headers: output/compiled-objects
 
 # make cscope.files, telling scsope which files to look at
 output/cscope.files: output/compiled-headers
-	cd output && cat compiled-headers | sort > cscope.files
+	cd output && cat compiled-headers \
+		| grep -v '\.c$$' | sort > cscope.files
 
 # make cscope database
 $(KERNPATH)/cscope.out: output/cscope.files
