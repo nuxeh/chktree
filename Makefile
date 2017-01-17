@@ -16,6 +16,7 @@ output:
 # enable debugging symbols, build kernel, save list of object filenames from
 # CC lines in kbuild output
 output/compiled-objects output/compiled-source: | output
+	rm -f /tmp/compiled-objects
 	cd $(KERNPATH) && \
 		make clean && \
 		make ARCH=arm CROSS_COMPILE=$(CC) $(DEFCONFIG) && \
@@ -32,6 +33,7 @@ output/compiled-objects output/compiled-source: | output
 # use objdump to extract debugging symbols describing the header files
 # included to make build compiled object
 output/compiled-headers: output/compiled-objects
+	rm -f /tmp/compiled-headers
 	for file in `cat output/compiled-objects`; do \
 		$(CC)objdump -W $(KERNPATH)/$$file \
 		| $(PWD)/filter-objdump.awk >> /tmp/compiled-headers; done
