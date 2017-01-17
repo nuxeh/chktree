@@ -8,6 +8,7 @@ all: all-global-definitions report
 PWD=$(shell pwd -P)
 CC=arm-linux-gnueabihf-
 DEFCONFIG=ts001_ic_defconfig
+PATHS=paths
 
 output:
 	mkdir output
@@ -33,7 +34,7 @@ output/compiled-objects output/compiled-source: output
 output/compiled-headers: output/compiled-objects
 	for file in `cat output/compiled-objects`; do \
 		$(CC)objdump -W $(KERNPATH)/$$file \
-		| ../filter-objdump.awk >> /tmp/compiled-headers; done
+		| ./filter-objdump.awk >> /tmp/compiled-headers; done
 	sort /tmp/compiled-headers | uniq > output/compiled-headers
 
 # make cscope.files, telling scsope which files to look at
@@ -52,12 +53,20 @@ output/all-global-definitions: $(KERNPATH)/cscope.out
 	cd $(KERNPATH) && \
 		cscope -L -1 ".*" > $(PWD)/output/all-global-definitions
 
-all-defines: output/all-global-definitions
+output/all-defines: output/all-global-definitions
 	cd output && \
 	cat all-global-definitions | ../strip-defines.awk > all-defines
 
-all-prototypes: all-global-definitions
+output/all-prototypes: output/all-global-prototypes
 
+
+output/split-defines:
+	mkdir output/split-defines
+	cd output/split-defines && \
+		$(PWD)/sort_dirs.awk $(PATHS) $(PWD)/all-defines
+
+output/split-prototypes:
+	mkdir output/split-prototypes
 
 # run tests
 report: all-defines all-prototypes
@@ -66,3 +75,5 @@ report: all-defines all-prototypes
 clean:
 	rm -f $(KERNPATH)/cscope.out
 	rm -rfv output
+	rm -rfv output/split-defines
+	rm -rfv output/split-prototypes
