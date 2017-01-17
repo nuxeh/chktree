@@ -13,14 +13,13 @@ ARGIND > 1 {
 	#find_match()
 }
 
+FNR == 1 {asort(paths, paths_s, "cmp_len_val")}
+
 END {
-	PROCINFO["sorted_in"] = "cmp_len_val"
-	for (a in paths)
-		print paths[a]
+	for (a in paths_s)
+		print paths_s[a]
 }
 
-function cmp_len_val(i1, v1, i2, v2)
-{
-	print length(v2) "-" length(v1)
+function cmp_len_val(i1, v1, i2, v2) {
 	return length(v2) - length(v1)
 }
