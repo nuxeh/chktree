@@ -66,7 +66,7 @@ output/all-prototypes: output/all-global-prototypes
 output/split-defines: output/all-defines
 	mkdir output/split-defines
 	cd output/split-defines && \
-		$(PWD)/sort_dirs.awk $(PATHS) $(PWD)/all-defines
+		$(PWD)/sort-dirs.awk $(PATHS) $(PWD)/all-defines
 
 output/split-prototypes: output/all-defines
 	mkdir output/split-prototypes
