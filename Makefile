@@ -8,7 +8,8 @@ all: all-global-definitions report
 PWD=$(shell pwd -P)
 CC=arm-linux-gnueabihf-
 DEFCONFIG=ts001_ic_defconfig
-PATHS=paths
+PATHS=$(PWD)/paths
+KERNPATH=$(PWD)/../linux/
 
 output:
 	mkdir output
