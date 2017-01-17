@@ -27,9 +27,9 @@ ARGIND > 1 {
 }
 
 END {
-	print "summary:"
+	# print summary
 	for (a in paths)
-		print paths[a] ":" counts[paths[a]]
+		print counts[paths[a]] ":\t" paths[a]
 	print counts["unmatched"] " unmatched"
 }
 
