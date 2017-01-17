@@ -15,7 +15,7 @@ output:
 
 # enable debugging symbols, build kernel, save list of object filenames from
 # CC lines in kbuild output
-output/compiled-objects output/compiled-source: output
+output/compiled-objects output/compiled-source: | output
 	cd $(KERNPATH) && \
 		make clean && \
 		make ARCH=arm CROSS_COMPILE=$(CC) $(DEFCONFIG) && \
