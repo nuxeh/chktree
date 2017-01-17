@@ -28,9 +28,10 @@ ARGIND > 1 {
 
 END {
 	# print summary
+	OFS = "\t"
 	for (a in paths)
-		print counts[paths[a]] ":\t" paths[a]
-	print counts["unmatched"] " unmatched"
+		print counts[paths[a]], paths[a]
+	print counts["unmatched"], "unmatched"
 }
 
 function cmp_len_val(i1, v1, i2, v2)
