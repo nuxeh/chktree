@@ -4,15 +4,13 @@ BEGIN {
 
 }
 
-FNR == 1 {++f_index}
-
 # read file list
-f_index == 1 {
+ARGIND == 1 {
 	paths[count++] = $0
 }
 
 # read source lists
-f_index > 1 {
+ARGIND > 1 {
 	print "> " $0
 	
 }
