@@ -78,11 +78,15 @@ output/split-prototypes: output/all-defines
 	mkdir output/split-prototypes
 
 # run tests
-report: all-defines all-prototypes
-	./run-tests.awk
+report: output/split-defines/duplicate-symbols
+	cd output/split-defines && \
+		while read def; do \
+			print $$def \
+			grep $$def sorted_path_* | awk '{print "  " $$0} \
+		done < duplicate-symbols > report-defines
 
 clean:
-	rm -f $(KERNPATH)/cscope.out
+	rm -fv $(KERNPATH)/cscope.out report-*
 	rm -rfv output
 	rm -rfv output/split-defines
 	rm -rfv output/split-prototypes

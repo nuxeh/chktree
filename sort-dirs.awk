@@ -2,7 +2,6 @@
 
 BEGIN {
 	PROCINFO["sorted_in"] = "cmp_len_val"
-	counts["unmatched"] = 0
 }
 
 # read file list (first input file)
