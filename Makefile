@@ -78,11 +78,11 @@ output/split-prototypes: output/all-defines
 	mkdir output/split-prototypes
 
 # run tests
-report: output/split-defines/duplicate-symbols
+report-defines: output/split-defines/duplicate-symbols
 	cd output/split-defines && \
 		while read def; do \
 			print $$def \
-			grep $$def sorted_path_* | awk '{print "  " $$0} \
+			grep $$def sorted_path_* | awk '{print "  " $$0}' \
 		done < duplicate-symbols > report-defines
 
 clean:
