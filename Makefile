@@ -62,30 +62,21 @@ output/all-defines: output/all-global-definitions
 	cd output && \
 	cat all-global-definitions | $(PWD)/strip-defines.awk > all-defines
 
-output/all-prototypes: output/all-global-prototypes
-
-
-output/split-defines/duplicate-symbols: output/all-defines
-	mkdir -p output/split-defines
-	cd output/split-defines && \
-		$(PWD)/sort-dirs.awk $(PATHS) $(PWD)/output/all-defines
-	# find duplicate symbols
-	cd output/split-defines && \
-		awk '{print $$3}' sorted_path_* \
+output/duplicate-defines: output/all-defines
+	cd output && \
+		awk '{print $$3}' all-defines \
 		| sort | uniq -c \
-		| awk '{if ($$1 > 1) print $$2}' > duplicate-symbols
-
-output/split-prototypes: output/all-defines
-	mkdir output/split-prototypes
+		| awk '{if ($$1 > 1) print $$2}' > duplicate-defines
 
 # run tests
-report-defines: output/split-defines/duplicate-symbols
-	cd output/split-defines && \
+report-defines: output/duplicate-defines
+	cd output/ && \
 		while read def; do \
 			echo $$def; \
-			grep "#define $$def " sorted_path_* \
+			awk '{print $$3 "\t" $$0}' all-defines | sort \
+			| grep "$$def" |
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
-			gsub(/@/, "/"); gsub(/:/, "\t"); print "  " $$0}'; \
+			gsub(/@/, "/"); gsub(/:/, "\t"); print $$0}'; \
 		done < duplicate-symbols > $(PWD)/report-defines
 
 clean:
