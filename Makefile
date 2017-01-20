@@ -55,7 +55,8 @@ $(KERNPATH)/cscope.out: output/cscope.files
 # cscope
 output/all-global-definitions: $(KERNPATH)/cscope.out
 	cd $(KERNPATH) && \
-		cscope -L -1 ".*" > $(PWD)/output/all-global-definitions
+		cscope -L -1 ".*" | sort | uniq \
+		> $(PWD)/output/all-global-definitions
 
 output/all-defines: output/all-global-definitions
 	cd output && \
@@ -71,7 +72,7 @@ output/split-defines/duplicate-symbols: output/all-defines
 	# find duplicate symbols
 	cd output/split-defines && \
 		awk '{print $$3}' sorted_path_* \
-		| sort | uniq | uniq -c \
+		| sort | uniq -c \
 		| awk '{if ($$1 > 1) print $$2}' > duplicate-symbols
 
 output/split-prototypes: output/all-defines
