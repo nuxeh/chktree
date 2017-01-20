@@ -77,7 +77,7 @@ report-defines: output/duplicate-defines
 			| grep "$$def" \
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
 			gsub(/@/, "/"); gsub(/:/, "\t"); print $$0}'; \
-		done < duplicate-symbols > $(PWD)/report-defines
+		done < duplicate-defines > $(PWD)/report-defines
 
 clean:
 	rm -fv $(KERNPATH)/cscope.out report-*
