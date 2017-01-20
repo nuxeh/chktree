@@ -84,7 +84,7 @@ report-defines: output/split-defines/duplicate-symbols
 			print $$def \
 			grep $$def sorted_path_* \
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
-			gsub(/@/, "/"); print "  " $$0}' \
+			gsub(/@/, "/"); print "  " $$0}'; \
 		done < duplicate-symbols > report-defines
 
 clean:
