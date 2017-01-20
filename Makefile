@@ -81,10 +81,10 @@ output/split-prototypes: output/all-defines
 report-defines: output/split-defines/duplicate-symbols
 	cd output/split-defines && \
 		while read def; do \
-			print $$def \
+			echo $$def; \
 			grep $$def sorted_path_* \
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
-			gsub(/@/, "/"); print "  " $$0}'; \
+			gsub(/@/, "/"); print "  "}1'; \
 		done < duplicate-symbols > report-defines
 
 clean:
