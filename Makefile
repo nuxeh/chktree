@@ -71,7 +71,7 @@ output/split-defines/duplicate-symbols: output/all-defines
 	# find duplicate symbols
 	cd output/split-defines && \
 		awk '{print $$3}' sorted_path_* \
-		| sort | uniq -c \
+		| sort | uniq | uniq -c \
 		| awk '{if ($$1 > 1) print $$2}' > duplicate-symbols
 
 output/split-prototypes: output/all-defines
@@ -82,7 +82,9 @@ report-defines: output/split-defines/duplicate-symbols
 	cd output/split-defines && \
 		while read def; do \
 			print $$def \
-			grep $$def sorted_path_* | awk '{print "  " $$0}' \
+			grep $$def sorted_path_* \
+			| awk -F ":" '{gsub(/sorted_path_/, ""); \
+			gsub(/@/, "/"); print "  " $$0}' \
 		done < duplicate-symbols > report-defines
 
 clean:
