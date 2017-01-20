@@ -85,7 +85,7 @@ report-defines: output/split-defines/duplicate-symbols
 			grep $$def sorted_path_* \
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
 			gsub(/@/, "/"); print "  "}1'; \
-		done < duplicate-symbols > report-defines
+		done < duplicate-symbols > $(PWD)/report-defines
 
 clean:
 	rm -fv $(KERNPATH)/cscope.out report-*
