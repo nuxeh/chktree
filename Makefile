@@ -74,7 +74,7 @@ report-defines: output/duplicate-defines
 		while read def; do \
 			echo $$def; \
 			awk '{print $$3 "\t" $$0}' all-defines | sort \
-			| grep "$$def" |
+			| grep "$$def" \
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
 			gsub(/@/, "/"); gsub(/:/, "\t"); print $$0}'; \
 		done < duplicate-symbols > $(PWD)/report-defines
