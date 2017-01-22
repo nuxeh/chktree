@@ -61,6 +61,7 @@ output/all-global-definitions: $(KERNPATH)/cscope.out
 		cat /tmp/all-global-definitions \
 		| $(PWD)/strip-defines.awk \
 		| sort > all-global-definitions
+	# TODO filter function protos
 
 output/duplicate-defines: output/all-defines
 	cd output && \

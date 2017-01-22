@@ -5,8 +5,10 @@ BEGIN { ORS = "" }
 /#define/ {
 	gsub(/\.\*/, "", $0)
 
-	# print file:line
-	print "DEF " $4 " | " $1 ":" $2 " |"
+	# print file:line, strip parameters
+	def_symbol = $4
+	gsub(/\(.*$/,"",def_symbol)
+	print "DEF " def_symbol " | " $1 ":" $2 " |"
 
 	# print remainder
 	for (i=3; i<=NF; i++)
