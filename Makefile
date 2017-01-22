@@ -63,24 +63,11 @@ output/all-global-definitions: $(KERNPATH)/cscope.out
 		| sort > all-global-definitions
 	# TODO filter function protos
 
-output/duplicate-defines: output/all-defines
+output/duplicates: output/all-global-definitions
 	cd output && \
-		awk '{print $$3}' all-defines \
-		| sort | uniq -c \
-		| awk '{if ($$1 > 1) print $$2}' > duplicate-defines
-
-# run tests
-report-defines: output/duplicate-defines
-	cd output/ && \
-		while read def; do \
-			echo $$def; \
-			awk "/$$def/ {print $$3 \"\t\" $$0}" all-defines | sort \
-			| awk -F ":" '{gsub(/sorted_path_/, ""); \
-			gsub(/@/, "/"); gsub(/:/, "\t"); print $$0}'; \
-		done < duplicate-defines > $(PWD)/report-defines
+		./filter-symbols.awk $(PWD)/paths all-global-definitions \
+		> duplicates
 
 clean:
 	rm -fv $(KERNPATH)/cscope.out report-*
 	rm -rfv output
-	rm -rfv output/split-defines
-	rm -rfv output/split-prototypes
