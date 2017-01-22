@@ -20,7 +20,7 @@
 		# print unique lines for last symbol
 		if (line_count > 1) {
 			for (l in lines) {
-				print lines[l]
+				print line_count "\t" lines[l]
 			}
 		}
 
