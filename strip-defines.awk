@@ -6,7 +6,7 @@ BEGIN { ORS = "" }
 	gsub(/\.\*/, "", $0)
 
 	# print file:line
-	print $1 ":" $2
+	print "DEF" $3 "\t" $1 ":" $2 " |"
 
 	# print remainder
 	for (i=3; i<=NF; i++)

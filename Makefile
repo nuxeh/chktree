@@ -56,11 +56,11 @@ $(KERNPATH)/cscope.out: output/cscope.files
 output/all-global-definitions: $(KERNPATH)/cscope.out
 	cd $(KERNPATH) && \
 		cscope -L -1 ".*" | sort | uniq \
-		> $(PWD)/output/all-global-definitions
-
-output/all-defines: output/all-global-definitions
+		> /tmp/all-global-definitions
 	cd output && \
-	cat all-global-definitions | $(PWD)/strip-defines.awk > all-defines
+		cat /tmp/all-global-definitions \
+		| $(PWD)/strip-defines.awk \
+		| sort > all-global-definitions
 
 output/duplicate-defines: output/all-defines
 	cd output && \
