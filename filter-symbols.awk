@@ -21,6 +21,9 @@ ARGIND == 1 {
 		exit(1)
 	}
 
+	if (length($0) > max_path_length)
+		max_path_length = length($0)
+
 	next
 }
 
@@ -36,8 +39,10 @@ ARGIND > 1 {
 		# print unique lines for last symbol
 		if (line_count > 1) {
 			for (l in lines) {
-				print line_count "\t" lines[l]
+				print lines[l]
 			}
+
+			print ""
 		}
 
 		# reset state for next symbol
@@ -48,10 +53,8 @@ ARGIND > 1 {
 	}
 
 	for (a in paths) {
-		print paths[a] "\t" count_paths[paths[a]]
 		if (match($0, paths[a])) {
 			path = paths[a]
-			print "match " path
 			break
 		}
 	}
@@ -59,15 +62,14 @@ ARGIND > 1 {
 	count_files[file]++
 	count_paths[path]++
 
-	print count_paths[path]++ "\t" path
-
-	#if (0 && path == "/" && count_paths[path] > 1)
-	#	next
+	path_fill = ""
+	for (j=0; j<max_path_length - length(path); j++)
+		path_fill = path_fill " "
 
 	# stash lines not duplicated within a single file
 	# and not within the same comparison path
-	if (count_files[file] == 1){
-		lines[line_count++] = path "\t" $0
+	if (count_files[file] == 1 && count_paths[path] == 1){
+		lines[line_count++] = path_fill path " | " $0
 	}
 }
 
