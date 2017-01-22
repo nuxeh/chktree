@@ -73,8 +73,7 @@ report-defines: output/duplicate-defines
 	cd output/ && \
 		while read def; do \
 			echo $$def; \
-			awk '{print $$3 "\t" $$0}' all-defines | sort \
-			| grep "$$def" \
+			awk "/$$def/ {print $$3 \"\t\" $$0}" all-defines | sort \
 			| awk -F ":" '{gsub(/sorted_path_/, ""); \
 			gsub(/@/, "/"); gsub(/:/, "\t"); print $$0}'; \
 		done < duplicate-defines > $(PWD)/report-defines
