@@ -26,6 +26,7 @@ ARGIND == 1 {
 
 # read input symbol list (remaining imput files)
 ARGIND > 1 {
+	last_symbol = current_symbol
 	current_symbol = $2
 
 	file = $4
@@ -40,26 +41,34 @@ ARGIND > 1 {
 		}
 
 		# reset state for next symbol
-		delete count # reset file count array
+		delete count_files # reset file count array
+		delete count_paths # reset file count array
 		delete lines
 		line_count = 0
 	}
 
 	for (a in paths) {
+		print paths[a] "\t" count_paths[paths[a]]
 		if (match($0, paths[a])) {
 			path = paths[a]
+			print "match " path
+			break
 		}
 	}
 
-	count[file]++
-	count[path]++
+	count_files[file]++
+	count_paths[path]++
+
+	print count_paths[path]++ "\t" path
+
+	#if (0 && path == "/" && count_paths[path] > 1)
+	#	next
 
 	# stash lines not duplicated within a single file
 	# and not within the same comparison path
-	if (count[file] == 1 && count[path] == 1)
+	if (count_files[file] == 1){
 		lines[line_count++] = path "\t" $0
-
-	last_symbol = current_symbol
+	}
 }
 
 # function for sorting by array value length
