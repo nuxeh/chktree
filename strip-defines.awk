@@ -14,4 +14,6 @@ BEGIN { ORS = "" }
 	for (i=3; i<=NF; i++)
 		print " " $i
 	print "\n"
+} else {
+	print $0 > other-stuff
 }
