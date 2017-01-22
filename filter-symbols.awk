@@ -6,17 +6,7 @@
 	file = $4
 	gsub(/:.*$/, "", file)
 
-	count[file]++
-
-	# stash lines not duplicated within a single file
-	if (count[file] == 1)
-		lines[line_count++] = $0
-
-	if (current_symbol == last_symbol) {
-
-		#print file " " $0
-
-	} else {
+	if (current_symbol != last_symbol) {
 		# print unique lines for last symbol
 		if (line_count > 1) {
 			for (l in lines) {
@@ -29,6 +19,12 @@
 		delete lines
 		line_count = 0
 	}
+
+	count[file]++
+
+	# stash lines not duplicated within a single file
+	if (count[file] == 1)
+		lines[line_count++] = $0
 
 	last_symbol = current_symbol
 }
